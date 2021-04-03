@@ -11,7 +11,7 @@ demo deployment for a web app
 
 ## Configure Environment
 * Clone this repo to local machine
-* Modify variables.tf defaults and env/ tfvars files to match your deployment environment e.g. region, app name etc.
+* Modify variables.tf defaults and env/ tfvars files to match your deployment environment e.g. region, app name, elb allowlist etc.
 * In main.tf change backend bucket
 * Create the following environment variables:
   ```bash

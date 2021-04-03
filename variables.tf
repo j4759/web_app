@@ -34,7 +34,7 @@ variable "cidr_block" {
 variable "elb_allowlist" {
   type = list
   description = "Cidr blocks to allow on app load balancer security group, for public access put 0.0.0.0/0"
-  
+  default = [<add ips here>]
 }
 
 
