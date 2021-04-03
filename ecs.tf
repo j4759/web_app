@@ -4,7 +4,7 @@ locals {
 
 resource "aws_ecs_cluster" "app" {
   name               = "${var.app_name}-${terraform.workspace}"
-  capacity_providers = [aws_autoscaling_group.app.arn]
+  capacity_providers = [ "FARGATE" ]
 
   tags = {
     "Name" = "${var.app_name}-${terraform.workspace}"
