@@ -23,11 +23,6 @@ variable "deployment_account_id" {
   description = "The id of the AWS account you will deploy the app to e.g. 012345678910"
 }
 
-variable "state_bucket" {
-  type        = string
-  description = "s3 bucket where state is stored - managed by github"
-}
-
 # networking and security
 
 variable "cidr_block" {
