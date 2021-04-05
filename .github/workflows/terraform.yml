@@ -28,9 +28,13 @@ jobs:
       id: fmt
       run: terraform fmt -check
 
+    - name: Test vars
+      id: Test
+      run: echo "$TEST"
+
     - name: Terraform init
       id: init
-      run: terraform init -backend-config="bucket=$BACKEND_BUCKET_NAME"
+      run: terraform init -backend-config="bucket=$BACKEND_BUCKET_NAME" -input=false
 
     - name: Terraform workspace
       id: workspace
@@ -69,7 +73,7 @@ jobs:
 
     - name: Terraform init
       id: init
-      run: terraform init -backend-config="bucket=$BACKEND_BUCKET_NAME"
+      run: terraform init -backend-config="bucket=$BACKEND_BUCKET_NAME" -input=false
 
     - name: Terraform workspace
       id: workspace
