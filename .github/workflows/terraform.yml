@@ -28,14 +28,10 @@ jobs:
       id: fmt
       run: terraform fmt -check
 
-    - name: Test vars
-      id: Test
-      env:
-        TEST: ${{ secrets.TEST }}
-      run: echo "$TEST"
-
     - name: Terraform init
       id: init
+      env:
+        BACKEND_BUCKET_NAME: ${{ secrets.BACKEND_BUCKET_NAME }}
       run: terraform init -backend-config="bucket=$BACKEND_BUCKET_NAME" -input=false
 
     - name: Terraform workspace
