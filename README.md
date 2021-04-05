@@ -1,6 +1,8 @@
 # web_app
 demo deployment for a web app
 
+This repo deploys a simple apache2 website as a docker container 
+
 ## Environment Requirements
 * Unix OS
 * AWS account
@@ -82,21 +84,25 @@ No outputs.
 
 ---
 
-## Configure Environment
+## Development Process
 * Clone this repo to local machine
-* Modify variables.tf defaults and env/ tfvars files to match your deployment environment e.g. region, app name, elb allowlist etc.
-* In main.tf change backend bucket
+* Make desired changes to code (if you making changes to the docker image see image creation)
+* Push changes to repo
+* Create a PR, the github workflow will deploy to dev
+* Review changes in Dev, request a review
+* If the PR is approved your changes will be pushed to prod
+  
+
+---
+
+## image creation
+To make build the image and upload to ecr complete the following actions.
 * Create the following environment variables:
   ```bash
     export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
     export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
     export AWS_DEFAULT_REGION=<insert desired region>
   ```
-
----
-
-## image creation
-To build the image and upload to ecr complete the following actions. ECR was chosen as the repository location due to its intergration with ECS.
 * Navigate to image directory
 * Login to ECR `aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <account id>.dkr.ecr.<region>.amazonaws.com`
 * `docker build -t app-website-apache .`
@@ -104,12 +110,5 @@ To build the image and upload to ecr complete the following actions. ECR was cho
 * `docker push <account id>.dkr.<region>.amazonaws.com/app-website-apache:latest`
 
 ---
-
-## Deployment 
-* Navigate to repository root 
-* run `terraform init`
-* run `terraform workspace select <dev/prod>`
-* run `terraform plan --var-file=env/<stage>.tfvars` and review plan
-* run `terraform apply --var-file=env/<stage>.tfvars`
 
 
