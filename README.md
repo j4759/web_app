@@ -11,10 +11,13 @@ The infrastructure is deployed by a github terraform workflow and the web app's 
 
 To make changes to the service you require contributor status on the repo and an AWS iam user to update the image, please contact the repo admin if you would like these permissions.
 
+---
+
 ## Architecture Diagram
 
 ![Architecture Diagram](ArchitectureDiagram.png)
 
+---
 
 ## Environment Requirements
 * Unix OS
@@ -23,8 +26,9 @@ To make changes to the service you require contributor status on the repo and an
 * AWS IAM user in deployment account
 * AWS CLI v2
 
+---
 
-## Terraform Requirements
+## Terraform
 
 ### Requirements
 
@@ -108,7 +112,7 @@ No outputs.
 
 ---
 
-## image creation
+## Image Creation
 To make build the image and upload to ecr complete the following actions.
 * Create the following environment variables:
   ```bash
