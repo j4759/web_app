@@ -1,14 +1,11 @@
 name: 'Terraform'
 
-on:
-  push:
-  pull_request:
-  
+on: [push, pull_request]
 
 jobs:
   terraformdev:
     name: 'Terraformdev'
-    if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'pull_request'}}
+    if: ${{ github.base_ref == 'main' && github.event_name == 'pull_request'}}
     runs-on: ubuntu-latest
     environment: dev
 
