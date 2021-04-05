@@ -81,6 +81,6 @@ variable "enable_vpcflowlogs" {
 
 variable "alerting_email" {
   type        = string
-  description = "An email to recieve monitoring alerts"
+  description = "An email to recieve monitoring alerts - managed by github"
 }
 

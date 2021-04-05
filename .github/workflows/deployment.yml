@@ -54,7 +54,7 @@ jobs:
      
     - name: Terraform Apply
       id: apply
-      run: terraform apply tfplan -input=false -var-file=env/dev.tfvars -var "allowlist_cidr=$ALLOWLIST_CIDR" -var "deployment_account_id=$DEPLOYMENT_ACCOUNT" -var "deployment_role_arn=$DEPLOYMENT_ROLE_ARN" -var "alerting_email=$ALERTING_EMAIL"
+      run: terraform apply "tfplan" -input=false -var-file=env/dev.tfvars -var "allowlist_cidr=$ALLOWLIST_CIDR" -var "deployment_account_id=$DEPLOYMENT_ACCOUNT" -var "deployment_role_arn=$DEPLOYMENT_ROLE_ARN" -var "alerting_email=$ALERTING_EMAIL"
   
   terraformprod:
     name: 'Terraformprod'

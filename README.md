@@ -60,7 +60,7 @@ demo deployment for a web app
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_alerting_email"></a> [alerting\_email](#input\_alerting\_email) | An email to recieve monitoring alerts | `string` | n/a | yes |
+| <a name="input_alerting_email"></a> [alerting\_email](#input\_alerting\_email) | An email to recieve monitoring alerts - managed by github | `string` | n/a | yes |
 | <a name="input_allowlist_cidr"></a> [allowlist\_cidr](#input\_allowlist\_cidr) | Allowlist a single IP using X.X.X.X/32, or a larger range of IPs e.g. X.X.X.X/16, or for public access put 0.0.0.0/0 - managed by github | `string` | n/a | yes |
 | <a name="input_app_name"></a> [app\_name](#input\_app\_name) | The name of the app you will deploy | `string` | `"app"` | no |
 | <a name="input_cidr_block"></a> [cidr\_block](#input\_cidr\_block) | Range of private IPs to assign to VPC | `string` | `"10.0.0.0/16"` | no |
