@@ -1,13 +1,20 @@
 # web_app
+
+## Overview
 demo deployment for a web app
 
-This repo deploys a simple apache2 website as a docker container 
+This repo deploys a simple apache2 website as a docker container hosted on AWS Fargate
+
+Deployment is controlled by github terraform workflow
+
+The app's state is stored in S3
+
+To make changes you to this project you require contributor status on this repo and an AWS iam user to update the image, please contact the repo admin if you would like these permissions
+
 
 ## Environment Requirements
 * Unix OS
-* AWS account
-* S3 bucket and ECR repo
-* Deployment IAM role
+* AWS IAM user in deployment account
 * AWS CLI v2
 
 
@@ -86,10 +93,10 @@ No outputs.
 
 ## Development Process
 * Clone this repo to local machine
-* Make desired changes to code (if you making changes to the docker image see image creation)
+* Make desired changes to code (if you make changes to the docker image see image creation)
 * Push changes to repo
 * Create a PR, the github workflow will deploy to dev
-* Review changes in Dev, request a review
+* Review changes in deployment account, request a review from a repo admin
 * If the PR is approved your changes will be pushed to prod
   
 
@@ -105,9 +112,9 @@ To make build the image and upload to ecr complete the following actions.
   ```
 * Navigate to image directory
 * Login to ECR `aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <account id>.dkr.ecr.<region>.amazonaws.com`
-* `docker build -t app-website-apache .`
-* `docker tag app-website-apache:latest <account id>.dkr.ecr.<region>.amazonaws.com/app-website-apache:latest`
-* `docker push <account id>.dkr.<region>.amazonaws.com/app-website-apache:latest`
+* `docker build -t <app_name>-repo-<env> .`
+* `docker tag <app_name>-repo-<env> <account id>.dkr.ecr.<region>.amazonaws.com/<app_name>-repo-<env>:latest`
+* `docker push <account id>.dkr.ecr.<region>.amazonaws.com/<app_name>-repo-<env>:latest` 
 
 ---
 
