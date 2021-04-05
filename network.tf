@@ -25,5 +25,14 @@ module "vpc" {
   enable_dns_hostnames = true
 
   enable_nat_gateway = true # allows ecs access to ecr and cloudwatch
+
+  enable_flow_log                      = var.enable_vpcflowlogs
+  create_flow_log_cloudwatch_log_group = var.enable_vpcflowlogs
+  create_flow_log_cloudwatch_iam_role  = var.enable_vpcflowlogs
+  flow_log_max_aggregation_interval    = 60
+
+  vpc_flow_log_tags = {
+    Name = "vpc-flow-logs-cloudwatch-logs-default"
+  }
 }
 

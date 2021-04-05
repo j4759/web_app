@@ -1,0 +1,84 @@
+name: 'Terraform'
+
+on:
+  push:
+  pull_request:
+  
+
+jobs:
+  terraformdev:
+    name: 'Terraformdev'
+    if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'pull_request'}}
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.14.9
+
+    - name: Terraform fmt
+      id: fmt
+      run: terraform fmt -check
+
+    - name: Terraform init
+      id: init
+      run: terraform init -backend-config="bucket=$BACKEND_BUCKET_NAME"
+
+    - name: Terraform workspace
+      id: workspace
+      run: terraform workspace select dev
+
+    - name: Terraform validate
+      id: validate
+      run: terraform validate -no-color 
+
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan -no-color -var-file=env/dev.tfvars -var 'allowlist_cidr=$ALLOWLIST_CIDR' -var 'deployment_account_id=$DEPLOYMENT_ACCOUNT' -var 'deployment_role_arn=$DEPLOYMENT_ROLE_ARN' -var 'alerting_email=$ALERTING_EMAIL
+
+    - name: Terraform Apply
+      id: apply
+      run: terraform apply -auto-approve -var-file=env/dev.tfvars -var 'allowlist_cidr=$ALLOWLIST_CIDR' -var 'deployment_account_id=$DEPLOYMENT_ACCOUNT' -var 'deployment_role_arn=$DEPLOYMENT_ROLE_ARN' -var 'alerting_email=$ALERTING_EMAIL
+  
+  terraformprod:
+    name: 'Terraformprod'
+    if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push'}}
+    runs-on: ubuntu-latest
+    environment: prod
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.14.9
+
+    - name: Terraform fmt
+      id: fmt
+      run: terraform fmt -check
+
+    - name: Terraform init
+      id: init
+      run: terraform init -backend-config="bucket=$BACKEND_BUCKET_NAME"
+
+    - name: Terraform workspace
+      id: workspace
+      run: terraform workspace select prod
+
+    - name: Terraform validate
+      id: validate
+      run: terraform validate -no-color
+
+    - name: Terraform Plan
+      id: Plan
+      run: terraform plan -no-color -var-file=env/dev.tfvars -var 'allowlist_cidr=$ALLOWLIST_CIDR' -var 'deployment_account_id=$DEPLOYMENT_ACCOUNT' -var 'deployment_role_arn=$DEPLOYMENT_ROLE_ARN' -var 'alerting_email=$ALERTING_EMAIL
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve -var-file=env/dev.tfvars -var 'allowlist_cidr=$ALLOWLIST_CIDR' -var 'deployment_account_id=$DEPLOYMENT_ACCOUNT' -var 'deployment_role_arn=$DEPLOYMENT_ROLE_ARN' -var 'alerting_email=$ALERTING_EMAIL

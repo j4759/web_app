@@ -18,7 +18,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = <your bucket name goes here>
+    # bucket = "<if deploying locally add bucket name here>"
     key    = "terraformstatefile"
     region = "eu-west-1"
   }

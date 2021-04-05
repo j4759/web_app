@@ -13,4 +13,6 @@ module "s3_log_bucket" {
   force_destroy = true
 
   attach_elb_log_delivery_policy = true
+
+  restrict_public_buckets = true
 }

@@ -8,7 +8,7 @@ variable "app_name" {
 
 variable "deployment_role_arn" {
   type = string
-  description = "The arn of the iam role used to deploy the app to AWS e.g arn:aws:iam::012345678910:role/role-name"
+  description = "The arn of the iam role used to deploy the app to AWS e.g arn:aws:iam::012345678910:role/role-name - managed by github"
 }
 
 variable "region" {
@@ -23,6 +23,11 @@ variable "deployment_account_id" {
   description = "The id of the AWS account you will deploy the app to e.g. 012345678910"
 }
 
+variable "state_bucket" {
+  type = string
+  description = "s3 bucket where state is stored - managed by github"
+}
+
 # networking and security
 
 variable "cidr_block" {
@@ -31,10 +36,9 @@ variable "cidr_block" {
   description = "Range of private IPs to assign to VPC"
 }
 
-variable "elb_allowlist" {
-  type = list
-  description = "Cidr blocks to allow on app load balancer security group, for public access put 0.0.0.0/0"
-  default = [<add ips here>]
+variable "allowlist_cidr" {
+  type = string
+  description = "Allowlist a single IP using X.X.X.X/32, or a larger range of IPs e.g. X.X.X.X/16, or for public access put 0.0.0.0/0 - managed by github"
 }
 
 
@@ -66,3 +70,22 @@ variable "task_container_protocal" {
   default = "tcp"
   description = "The networking protocol to enable on your tasks"
 }
+
+# Monitoring and logging
+
+
+variable "enable_cloudtrail" {
+  type = bool
+  description = "Setup up a cloudtrail to deliver api logs to logging bucket - true or false" 
+}
+
+variable "enable_vpcflowlogs" {
+  type = bool
+  description = "Enables VPC flow logs for app VPC, if flow logs are required for specific subnets or ENIs additional resources will be required"
+}
+
+variable "alerting_email" {
+  type = string
+  description = "An email to recieve monitoring alerts"
+}
+

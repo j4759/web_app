@@ -1,3 +1,7 @@
+locals {
+  allow_list = [ var.allowlist_cidr ]
+}
+
 resource "aws_security_group" "lb" {
   name        = "${var.app_name}-lb-sg-${terraform.workspace}"
   description = "Restricts access to ALB"
@@ -7,7 +11,7 @@ resource "aws_security_group" "lb" {
     protocol    = "tcp"
     from_port   = 80
     to_port     = 80
-    cidr_blocks = var.elb_allowlist
+    cidr_blocks = local.allow_list
   }
 
   egress {
