@@ -1,5 +1,5 @@
 locals {
-  allow_list = [ var.allowlist_cidr ]
+  allow_list = [var.allowlist_cidr]
 }
 
 resource "aws_security_group" "lb" {

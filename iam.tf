@@ -69,7 +69,7 @@ resource "aws_iam_role_policy_attachment" "task_s3" {
 }
 
 resource "aws_iam_role_policy_attachment" "cloudtrail_cloudwatch" {
-  count = var.enable_cloudtrail ? 1 : 0
+  count      = var.enable_cloudtrail ? 1 : 0
   role       = aws_iam_role.cloudtrail_cloudwatch_access.name
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
 }
