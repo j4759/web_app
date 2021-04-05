@@ -13,10 +13,7 @@ jobs:
     name: 'Terraformdev'
     if: ${{ github.base_ref == 'main' && github.event_name == 'pull_request'}}
     runs-on: ubuntu-latest
-    environment: dev
-    env:
-      TEST: ${{ secret.TEST }}
-      
+    environment: dev      
 
     steps:
     - name: Checkout
@@ -33,6 +30,8 @@ jobs:
 
     - name: Test vars
       id: Test
+      env:
+        TEST: ${{ secrets.TEST }}
       run: echo "$TEST"
 
     - name: Terraform init
