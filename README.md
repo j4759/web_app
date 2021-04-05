@@ -1,8 +1,5 @@
 # web_app
 
-## Contents
-[Overview] (#overview)
-
 ## Overview
 demo deployment for a web app
 
