@@ -42,7 +42,7 @@ resource "aws_ecs_task_definition" "app" {
     }
   ])
   depends_on = [
-    aws_ecr_repository.app.arn
+    aws_ecr_repository.app
   ]
 }
 
