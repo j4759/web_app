@@ -1,19 +1,28 @@
 # web_app
 
+## Contents
+[Overview] (#overview)
+
 ## Overview
 demo deployment for a web app
 
 This repo deploys a simple apache2 website as a docker container hosted on AWS Fargate
 
-Deployment is controlled by github terraform workflow
+Fargate handles autoscaling. However, the maximum and minimum number of tasks fargate can deploy can be changed if the range is insufficient. In addition the compute and memory allocations of each task can be changed to vertically scale the service. These settings can be configured in the tfvars files for each deployment stage.
 
-The app's state is stored in S3
+The infrastructure is deployed by a github terraform workflow and the web app's state is stored in S3
 
-To make changes you to this project you require contributor status on this repo and an AWS iam user to update the image, please contact the repo admin if you would like these permissions
+To make changes to the service you require contributor status on the repo and an AWS iam user to update the image, please contact the repo admin if you would like these permissions.
+
+## Architecture Diagram
+
+![Architecture Diagram](ArchitectureDiagram.png)
 
 
 ## Environment Requirements
 * Unix OS
+* Docker
+* Git authenticated to Github
 * AWS IAM user in deployment account
 * AWS CLI v2
 
