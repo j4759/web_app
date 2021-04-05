@@ -1,0 +1,103 @@
+name: 'Deployment'
+
+on: 
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
+
+jobs:
+  terraformdev:
+    name: 'Terraformdev'
+    if: ${{ github.base_ref == 'main' && github.event_name == 'pull_request'}}
+    runs-on: ubuntu-latest
+    environment: dev
+    env:
+      BACKEND_BUCKET_NAME: ${{ secrets.BACKEND_BUCKET_NAME }}
+      ALLOWLIST_CIDR: ${{ secrets.ALLOWLIST_CIDR }}
+      DEPLOYMENT_ACCOUNT: ${{ secrets.DEPLOYMENT_ACCOUNT }} 
+      DEPLOYMENT_ROLE_ARN: ${{ secrets.DEPLOYMENT_ROLE_ARN }}
+      ALERTING_EMAIL: ${{ secrets.ALERTING_EMAIL }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.14.9
+
+    - name: Terraform fmt
+      id: fmt
+      run: terraform fmt -check
+
+    - name: Terraform init
+      id: init
+      run: terraform init -backend-config="bucket=$BACKEND_BUCKET_NAME" -input=false
+
+    - name: Terraform workspace
+      id: workspace
+      run: terraform workspace select dev
+
+    - name: Terraform validate
+      id: validate
+      run: terraform validate -no-color 
+
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan -out=tfplan -input=false -var-file=env/dev.tfvars -var "allowlist_cidr=$ALLOWLIST_CIDR" -var "deployment_account_id=$DEPLOYMENT_ACCOUNT" -var "deployment_role_arn=$DEPLOYMENT_ROLE_ARN" -var "alerting_email=$ALERTING_EMAIL"
+     
+    - name: Terraform Apply
+      id: apply
+      run: terraform apply -input=false tfplan
+  
+  terraformprod:
+    name: 'Terraformprod'
+    if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push'}}
+    runs-on: ubuntu-latest
+    environment: prod
+    env:
+      BACKEND_BUCKET_NAME: ${{ secrets.BACKEND_BUCKET_NAME }}
+      ALLOWLIST_CIDR: ${{ secrets.ALLOWLIST_CIDR }}
+      DEPLOYMENT_ACCOUNT: ${{ secrets.DEPLOYMENT_ACCOUNT }} 
+      DEPLOYMENT_ROLE_ARN: ${{ secrets.DEPLOYMENT_ROLE_ARN }}
+      ALERTING_EMAIL: ${{ secrets.ALERTING_EMAIL }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.14.9
+
+    - name: Terraform fmt
+      id: fmt
+      run: terraform fmt -check
+
+    - name: Terraform init
+      id: init
+      run: terraform init -backend-config="bucket=$BACKEND_BUCKET_NAME" -input=false
+
+    - name: Terraform workspace
+      id: workspace
+      run: terraform workspace select prod
+
+    - name: Terraform validate
+      id: validate
+      run: terraform validate -no-color
+
+    - name: Terraform Plan
+      id: Plan
+      run: terraform plan out=tfplan -input=false -var-file=env/dev.tfvars -var "allowlist_cidr=$ALLOWLIST_CIDR" -var "deployment_account_id=$DEPLOYMENT_ACCOUNT" -var "deployment_role_arn=$DEPLOYMENT_ROLE_ARN" -var "alerting_email=$ALERTING_EMAIL"
+
+    - name: Terraform Apply
+      run: terraform apply tfplan -input=false -var-file=env/dev.tfvars -var "allowlist_cidr=$ALLOWLIST_CIDR" -var "deployment_account_id=$DEPLOYMENT_ACCOUNT" -var "deployment_role_arn=$DEPLOYMENT_ROLE_ARN" -var "alerting_email=$ALERTING_EMAIL"
