@@ -39,7 +39,7 @@ EOF
 }
 
 resource "aws_iam_role" "cloudtrail_cloudwatch_access" {
-  name = "${var.app_name}-ecs-task-role-${terraform.workspace}"
+  name = "${var.app_name}-cloudtrail-cloudwatch-role-${terraform.workspace}"
 
   assume_role_policy = <<EOF
 {
