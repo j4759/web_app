@@ -25,3 +25,4 @@ resource "aws_sns_topic_subscription" "alerting_endpoint" {
   protocol  = "email"
   endpoint  = var.alerting_email
 }
+
