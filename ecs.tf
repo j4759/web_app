@@ -22,7 +22,7 @@ resource "aws_ecs_task_definition" "app" {
   container_definitions = jsonencode([
     {
       name      = local.container_name
-      image     = "${var.deployment_account_id}.dkr.ecr.${var.region}.amazonaws.com/${var.app_name}-rep-${terraform.workspace}:latest"
+      image     = "${var.deployment_account_id}.dkr.ecr.${var.region}.amazonaws.com/${var.app_name}-repo-${terraform.workspace}:latest"
       essential = true
       "logConfiguration" : {
         "logDriver" : "awslogs",
