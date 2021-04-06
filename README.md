@@ -107,13 +107,18 @@ No outputs.
 * Push changes to repo
 * Create a PR, the github workflow will deploy to dev
 * Review changes in deployment account, request a review from a repo admin
-* If the PR is approved your changes will be pushed to prod
+* If the PR is approved your changes will be deployed to prod
+
+### 1st deployment
+* After the initial infrastructure deployment manually push the docker image to the ECR repo for the task definition
+* Subsquent deployments only require building and pushing the image if the web app source code has been changed
   
 
 ---
 
 ## Image Creation
-To make build the image and upload to ecr complete the following actions.
+To build the image and upload to ecr complete the following actions. 
+N.B. the image name must match <app_name>-repo-<env>:latest or the task definition will fail
 * Create the following environment variables:
   ```bash
     export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
@@ -122,7 +127,7 @@ To make build the image and upload to ecr complete the following actions.
   ```
 * Navigate to image directory
 * Login to ECR `aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <account id>.dkr.ecr.<region>.amazonaws.com`
-* `docker build -t <app_name>-repo-<env> .`
+* `docker build -t <app_name>-repo-<env> .`  
 * `docker tag <app_name>-repo-<env> <account id>.dkr.ecr.<region>.amazonaws.com/<app_name>-repo-<env>:latest`
 * `docker push <account id>.dkr.ecr.<region>.amazonaws.com/<app_name>-repo-<env>:latest` 
 
