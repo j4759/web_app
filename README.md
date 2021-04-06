@@ -6,7 +6,7 @@ demo deployment for a web app
 This repo deploys a simple apache2 website as a docker container hosted on AWS Fargate.
 
 ### Hosting and scaling
-AWS Fargate was chosen to host the web app as it has the benefits of serverless (autoscaling, reduced operational overhead) but with the extensibility of a containerised system.
+AWS Fargate was chosen to host the web app as it provides the benefits of serverless (autoscaling, reduced operational overhead) but with the extensibility of a containerised system.
 
 Fargate handles autoscaling. However, the maximum and minimum number of tasks fargate can deploy can be changed if the range is insufficient. In addition the compute and memory allocations of each task can be changed to vertically scale the service. These settings can be configured in the tfvars files for each deployment stage.
 
@@ -15,7 +15,7 @@ App Logs are captured by cloudwatch with the ability to toggle on/off cloudtrail
 A metric alarm for ALB 500X errors and a spending budget can alert web app admins via an SNS email alerting.  
 
 ### Security
-Access to the web app is restricted by IP using security groups, update the allowlist CIDR to add IPs
+Access to the web app is restricted by IP using security groups, update the allowlist CIDR to add IPs. If the web app is to be made publically accessible provide 0.0.0.0/0.
 Access to the web app is over HTTP, HTTPS access should be implimented to secure the connection.
 The fargate tasks are isolated from the public internet in private subnets. Users access them via an ALB and the tasks communicate with other services via a NAT gateway. The web app's security posture could be further improved using VPC endpoints for the AWS services such as ECR and cloudwatch removing the task's need for a NAT.
 Sensitive variables are stored securely in github and passed during deployment. 
